@@ -1,0 +1,20 @@
+YACC
+
+bison -d fileName.y
+gcc lex.yy.c fileName.tab.c
+./a.exe
+
+------------------------------------------
+
+LEX
+
+lex fileName.l
+gcc fileName.yy.c
+./a.out
+
+-------------------------------------------
+
+C++
+
+g++ fileName.cpp
+./a.out
