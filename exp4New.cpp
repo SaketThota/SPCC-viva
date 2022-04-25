@@ -3,6 +3,12 @@ using namespace std ;
 #include <fstream>
 #include <sstream>
 
+/*
+A -> Aab | AB | C
+B -> c
+
+A -> Aa | B
+*/
 
 map<string,vector<string>>prods; 
 
