@@ -3,6 +3,23 @@ using namespace std ;
 #include <fstream>
 #include <sstream>
 
+/*
+MACRO
+INCR ARG1 , ARG2
+ADD AREG , ARG1
+ADD AREG , ARG2
+MEND
+START
+INCR A , B 
+A DC 2 
+B DC 2
+C DC 3
+DATA1 DC 3 
+DATA2 DS 2
+DATA3 DC 4
+END
+*/
+
 //Data structures used
 map<string,pair<int,int>>mnt; 
 vector<string>mdt; 
