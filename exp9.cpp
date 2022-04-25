@@ -1,96 +1,73 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-//#define endl "\n"
-#define pb push_back
-#define ll long long int
-#define f(i, a, b) for(ll i=a;i<b;i++)
-#define rf(i, a, b) for(ll i=a;i>=b;i--)
-
-#define put(x) cout<<"I am here at "<<x<<" :";
-#define shov(v) for(auto i: v) cout<<i<<" ";cout<<endl;
-#define shom(m) for(auto i: m) cout<<i.first<<" "<<i.second<<endl;
-#define test(t) ll t;cin>>t;while(t--)
-#define __lcm(a, b) (((a) * (b)) / __gcd((a) , (b)))
-
-#define vi vector<int>
-#define vll vector<long long int>
-#define vs vector<string>
-#define mii map<int, int>
-#define si set<int>
-
 void solve() {
-    string s;cin>>s;
-    cout<<"OPERATOR's LOCATIONS : "<<endl;
-    map<char, vll>m;
-    ll curr = 1;
-    vector<char> ops = {'^', '*', '/', '%', '+', '-'};
-    f(i, 0, s.length()) if(find(ops.begin(), ops.end(), s[i]) != ops.end()) m[s[i]].pb(i);
-    for(auto &i: m) reverse(i.second.begin(), i.second.end());
-    for(auto i: m) {
-        cout<<i.first<<" : ";
-        shov(i.second);
-    } 
-    cout<<endl;
-    map<int, char>nums;
-    nums[0] = '0';
-    nums[1] = '1';
-    nums[2] = '2';
-    nums[3] = '3';
-    nums[4] = '4';
-    nums[5] = '5';
-    nums[6] = '6';
-    nums[7] = '7';
-    nums[8] = '8';
-    nums[9] = '9';
-    map<string, ll>result;
-    cout<<"LOGS : "<<endl;
-    cout<<"*************************************************"<<endl;
-    for(auto i: ops) {
-        f(j, 0, s.size()) {
-            if(s[j] == i) {
-                ll loc1 = -1, loc2 = -1;
-                f(k, j+1, s.size()) {
-                    if(find(ops.begin(), ops.end(), s[k]) != ops.end()) {
-                        loc2 = k - 1;
-                        break;
-                    }
-                }
-                if(loc2 == -1) loc2 = s.size() - 1;
-                rf(k, j-1, 2) {
-                    if(find(ops.begin(), ops.end(), s[k]) != ops.end()) {
-                        loc1 = k + 1;
-                        break;
-                    }
-                }
-                if(loc1 == -1) loc1 = 2;
-                string temp = "";
-                f(k, loc1, j) temp.pb(s[k]); 
-                temp.pb(s[j]); 
-                f(k, j+1, loc2+1) temp.pb(s[k]); 
-                cout<<"t"<<curr<<"="<<temp;
-                cout<<endl;
-                result[temp] = curr;
-                temp = "";
-                f(k, 0, loc1) temp.pb(s[k]);
-                temp.pb('t');
-                temp.pb(nums[curr]);
-                f(k, loc2+1, s.size()) temp.pb(s[k]);
-                s = temp;
-                cout<<s<<endl;
-                curr++;
-                cout<<"*************************************************"<<endl;
-            }
+    string s;
+    cin >> s;
+    vector<char> ops = {'^', '/', '*', '%', '-', '+'};
+
+    int t_cnt = 1;
+    map<string, string> ans;
+
+    for (int k = 0; k < 6;) {
+        if (count(s.begin(), s.end(), ops[k]) == 0) {
+            k++;
+            continue;
         }
+
+        int y;
+        for (y = 0; y < s.size(); y++) {
+            if (s[y] == ops[k])
+                break;
+        }
+
+        int l = y - 1;
+        string left = "";
+
+        while (l >= 0 && find(ops.begin(), ops.end(), s[l]) == ops.end() && s[l] != '=') {
+            left += s[l];
+            l--;
+        }
+        reverse(left.begin(), left.end());
+
+        int r = y + 1;
+        string right = "";
+
+        while (r < s.size() && find(ops.begin(), ops.end(), s[r]) == ops.end() && s[r] != '=') {
+            right += s[r];
+            r++;
+        }
+
+        string tnum = "t" + string(1, t_cnt + '0');
+        ans[tnum] = left + ops[k] + right;
+        s.erase(l + 1, r - l - 1);
+        s.insert(l + 1, tnum);
+        t_cnt++;
     }
-    cout<<s[0]<<"=t"<<curr<<endl;
-    cout<<"*************************************************"<<endl;
+
+    cout << "Three Address Code : \n\n";
+    string last;
+    for (auto &x : ans) {
+        cout << x.first << "=" << x.second << "\n";
+        last = x.first;
+    }
+    cout << s[0] << "=" << last;
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
-    test(t) solve();
+    solve();
 }
+
+/*
+IP :- 
+a=b-c*d+e/f
+
+OP :-
+Three Address Code : 
+
+t1=e/f
+t2=c*d
+t3=b-t2
+t4=t3+t1
+a=t4
+*/
